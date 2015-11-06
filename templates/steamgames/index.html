@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+     <!-- Bootstrap -->
+    {% load staticfiles %}
+    <link href="{% static "steamgames/css/bootstrap.css" %}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+    <h1>Enter profile link:</h1>
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+    <form action="{% url 'steamgames:index' %}" method="post">
+        {% csrf_token %}
+        <input type="Text" name="steamid" id="id_steamid" />
+        <!--<label for="id_username">Username</label><br />-->
+    <input type="submit" value="Search"/>
+    </form>
+
+    </div>
+    <script src="{% static "steamgames/js/jquery.js" %}"></script>
+    <script src="{% static "steamgames/js/bootstrap.js" %}"></script>
+</body>
+</html>

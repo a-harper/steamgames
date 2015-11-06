@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Info for {{ user.name }}</title>
+    {% load staticfiles %}
+    <!-- Bootstrap -->
+    <link href="{% static "steamgames/css/bootstrap.css" %}" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid">
+        <h1>{{ user }}</h1>
+        {% if info_message %}
+        <h6>{{ info_message }}</h6>
+        {% endif %}
+        <h2 style="padding-top:50px;">Info for {{ user.name }}</h2>
+        <br />
+        <form action="{% url 'steamgames:detaillist' user.steamid %}" method="post">
+            {% csrf_token %}
+            <input type="Text" name="steamid" id="id_steamid" />
+            <!--<label for="id_username">Username</label><br />-->
+        <input type="submit" value="Search"/>
+        </form>
+        <br />
+        <table class="table table-bordered table-hover" style="padding-top:50px;">
+            <tr>
+                <td><strong>Name</strong></td>
+                <td>{{ user.name }}</td>
+                <td><strong>Steam ID</strong></td>
+                <td>{{ user.steamid }}</td>
+                <td><strong>Real name</strong></td>
+                <td>{{ user.real_name }}</td>
+                <td><strong>Country</strong></td>
+                <td>{{ user.country_code }}</td>
+            </tr>
+            <tr>
+                <td><strong>VAC Banned?</strong></td>
+                <td>{{ user.is_vac_banned }}</td>
+                <td><strong>Community Banned?</strong></td>
+                <td>{{ user.is_community_banned }}</td>
+                <td><strong>Profile URL</strong></td>
+                <td><a href="{{ user.profile_url }}">{{ user.profile_url }}</a></td>
+                <td><strong>Created on</strong></td>
+                <td>{{ user.time_created }}</td>
+            </tr>
+        </table>
+    <h2>Games</h2>
+    <table class="table table-bordered table-hover" style="padding-top:50px;">
+        <tr>
+            <td>Name</td>
+            <td>Website</td>
+            <td>Genres</td>
+            <td>Categories</td>
+            <td>Developers</td>
+            <td>Metacritic Score</td>
+            <td>Price</td>
+        </tr>
+        {% for game in games %}
+            <tr>
+                <td>{{ game.name }}</td>
+                <td><a href="{{ game.website }}">{{ game.website }}</a></td>
+                <td>{% for genre in game.genres.all %}{{ genre }}<br />{% endfor %}</td>
+                <td>{% for category in game.categories.all %}{{ category }}<br />{% endfor %}</td>
+                <td>{% for dev in game.developers.all %}{{ dev }} {% endfor %}</td>
+                <td><a href="{{ game.metacritic_link }}">{{ game.metacritic_score }}</a></td>
+                <td>{{ game.sale_price }} {{ game.currency }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+
+    <script src="{% static "steamgames/js/jquery.js" %}"></script>
+    <script src="{% static "steamgames/js/bootstrap.js" %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.collapse').click(function(e){
+                $(this).parent().parent().next().find('.detail-container').toggle();
+                var text = $(this).text();
+                $(this).text(text == "+" ? "-" : "+");
+                e.preventDefault();
+            });
+            $('collapse-name').click(function(e{
+                $(this).parent().parent().next().find('.detail-container').toggle();
+                var el = $(this).parent().prev().children('a:first');
+                var text = el.text();
+                el.text(text == "+" ? "-" : "+");
+                e.preventDefault();
+            });
+        });
+
+    </script>
+</body>
+</html>
